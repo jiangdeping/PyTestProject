@@ -1,0 +1,146 @@
+__init__.py or __all__=[]  #指对外开放有哪些内容,  调用方式必须 from * import * 方式导入
+python 3.3版本 以后不需要__init__.py 文件也可以直接调用
+浮点数精度问题：Decimal("0.1")+Decimal("0.2")
+导出依赖包：
+pip install -r requirements.txt
+pip free >requirements.txt
+----------------pytest------------
+<<<<<<< HEAD
+相关包安装：
+pip install  pytest                ---pytest框架
+pip install  allure-pytest         ---生成allure报告
+pip install  pytest-assume         ---断言失败不会停止
+pip install  pymysql               ---mysql数据库连接
+pip install  pytest-rerunfailures  ---失败重跑
+pip install   xlrd                 ---读取excel文件
+pip install pytest-xdist           ---并行与分布式执行
+pip install pytest-html            ---测试报告
+pip install PyYAML                 ---yaml安装
+pip install allure-pytest          ---测试allure-pytest插件
+pip install pytest-ordering        ---测试用例顺序执行
+=======
+>>>>>>> parent of e736816 (2021/8/25:fix)
+终端执行
+pytest -v -s  文件名.py （-v 打印详细运行日志信息  -s带控制台输出结果）
+pytest 文件名.py::类名 运行摸个模块里面的某个类
+pytest 文件名.py::类名::方法名 运行某个模块里面的某个类里面的方法
+pytest -m[标记名] @python.mark.[标记名] 将运行有这个标记的测试用例
+pytest -x 文件名 运行到报错就停止
+pytest --maxfail=[num] 当运行错误达到num的时候停止运行
+
+pytest运行规则：
+pytest 收集所有以 test_*.py(可在pytest.ini修改)开头的文件，类及函数和方法，都能识别成测试用例
+常用参数
+-k:满足表达式的都会执行
+--collect-only 收集所有测试用例 不执行
+-m 加标签，执行需要加个 -m参数，为用例@pytest.mark 标签名
+-junit-xml 生产一个执行结果的xml文件
+
+conftest.py文件:将需要共享的公共模块放在该文件，该文件放在不同的位置起着不同的范围共享作用，
+不需要导入该文件，系统执行到参数时首先先从本文件中查找，然后在conftest.py中查找
+改写一些方法，改写执行顺序
+改写方法，自动添加标签
+配置注意事项：
+conftest.py文件名是不能更换的，与运行的用例放在同一package下
+
+pytest.ini 配置文件
+改变pytest运行的行为
+“”“
+[pytest]
+addopts=--alluredir=./result/1
+python_files="abc_*py"
+python_classes="Login*"
+python_functions="case*"
+“”“
+
+pytest失败重新运行：
+pip install pytest-rerunfailures
+pytest --reruns 3  --reruns-delay 2  -v -s 文件名.py  #--reruns 3 重新执行的次数 --reruns-delay 2 等待2s执行
+运行时间：07-07-51:00
+
+pytest 多条断言有失败也都运行
+pip install pytest-assume
+pytest.assume(表达式)
+
+pycharm 配置与执行pytest测试框架
+pytest.main("-v -x TestDemo") 、pytest.main(['-v','-s','TestDemo'])等同
+
+pytest框架结构:
+pytest的setup、teardown更灵活，执行顺序：
+模块级(setup_module/teardown_module)模块始末，全局的(优先更高)
+函数级(setup_function/teardown_function)只对函数用例生效(不在类中)
+类级(setup_class/teardown_class)只在类中前后运行一次(在类中)
+方法级(setup_method/teardown_method)开始于方法始末(在类中)
+类里面的(setup/teardown)运行在调用方法的前后
+
+pytest-fixture:
+有些用例需要登录，有些不需要登录。setup和teardown无法满足，fixture可以
+在登录的函数面前加入@pytest.fixture,在需要登录的测试方法中传入登录函数名称
+
+
+yield：通过在方法中加入yield关键字，yield之前的第一次调用该方法时执行，yield之前的后在最后一次调用该方法时执行
+@pytest.fixture(scope=module)
+scope:作用域  function 方法 、class 类 、module 模块 、package 包、session
+<<<<<<< HEAD
+
+fixture的自动化应用：
+在方法上加 @pytest.fixture(autouse=True)，每一条测试用例都加上该方法
+在测试方法上加 @pytest.mark.usefixtures("start")
+
+fixture带参数传递
+@pytest.fixture(params=[1,2,3,'linda']),在方法参数前写request
+
+
+
+mark中的skip与xfail
+skip：不想运行某些测试用例，skipif 满足条件的不运行该用例
+xfail：标记用例预期失败，如果用例运行成功则显示Xpassed，失败则显示xfailed。
+xfail标记并不会影响用例的运行。设置strict=True以确保XPASS时，测试的记录为失败
+
+pytest并行与分布式执行：
+pytest  文件名.py -n number
+
+pytest-html:生成报告
+pytest -v -s --html=report.html--self-contained-html
+
+pytest数据参数化
+@pytest.mark.parametrize(argnames,argvalues)  argnames,argvalues一一对应
+argnames:要参数化的变量,string,list,tuple
+argvalues:参数化的值,list,list[tuple]
+
+yaml实现list
+pip install PyYAML
+yaml.safe_load(open("文件名.yaml"))
+
+数据驱动：app、web、接口自动化测试
+测试步骤的数据驱动、测试数据的数据驱动、配置的数据驱动
+
+allure:
+安装：
+1.安装jdk1.8+(百度网盘)
+2.安装Allure(百度网盘)
+  解压并进入bin目录，运行allure.bat，将bin路径添加allure到环境变量PATH
+3.安装allure—pytest插件
+步骤：
+1.测试执行期间收集执行结果
+pytest 文件名.py  --alluredir=./result/1 (--alluredir 指定存储测试结果的路径)
+2.生成测试报告
+ 方法1：测试完成后查看实际报告 allure serve ./result/5
+ 方法2：从结果生成报告
+      生成报告：allure generate ./result/ -O ./report --clean(覆盖路径加--clean)
+      查看报告：allure open -h 127.0.0.1 -p 8883 ./report/
+常用特性
+@allure.feature("功能名称")
+@allure.story("子功能名称")
+with.allure.step("步骤细节")
+@allure.attach("具体文本信息"，需要附近的信息可以是数据、文本、图片、视频、网页)
+只运行部分功能：pytest 文件名  --allure_features "功能名称"  --allure_stories "子功能名称"
+
+按重要级别进行的范围测试
+1.附加pytest.mark标记
+2.allure.feature,allure.story
+3.allure.severity附加标记   级别：Trivial不重要、Minor不太重要、Normal正常、Critical严重、Blocker阻塞
+步骤：
+在方法、函数和类前面加：@allure.severity(allure.severity_level.级别)
+执行时：pytest -s -v 文件名 --allure-severities 级别(可多个用’,‘分割)
+
