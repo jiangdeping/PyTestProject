@@ -77,11 +77,12 @@ pytest-fixture:
 有些用例需要登录，有些不需要登录。setup和teardown无法满足，fixture可以
 在登录的函数面前加入@pytest.fixture,在需要登录的测试方法中传入登录函数名称
 
-
+yield 生成器， 相当于:return i+暂停+并记住上一次运行位置,与fixture结合使用，激活yield后面的操作
 yield：通过在方法中加入yield关键字，yield之前的第一次调用该方法时执行，yield之前的后在最后一次调用该方法时执行
 @pytest.fixture(scope=module)
-scope:作用域  function 方法 、class 类 、module 模块 、package 包、session
-<<<<<<< HEAD
+scope:session 作用域、function 方法 、class 类 、module 模块、package包
+执行顺序：session>module>function,如果有antouse=True,优先于同等级
+
 
 fixture的自动化应用：
 在方法上加 @pytest.fixture(autouse=True)，每一条测试用例都加上该方法
@@ -129,6 +130,7 @@ pytest 文件名.py  --alluredir=./result/1 (--alluredir 指定存储测试结�
  方法2：从结果生成报告
       生成报告：allure generate ./result/ -O ./report --clean(覆盖路径加--clean)
       查看报告：allure open -h 127.0.0.1 -p 8883 ./report/
+
 常用特性
 @allure.feature("功能名称")
 @allure.story("子功能名称")
@@ -144,3 +146,13 @@ with.allure.step("步骤细节")
 在方法、函数和类前面加：@allure.severity(allure.severity_level.级别)
 执行时：pytest -s -v 文件名 --allure-severities 级别(可多个用’,‘分割)
 
+驱动:
+测试数据的驱动
+测试步骤的驱动
+
+
+
+---------------selenium----------------
+webdriver
+IDE：录制
+Grid：分布式

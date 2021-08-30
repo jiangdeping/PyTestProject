@@ -3,13 +3,25 @@
 # 2021/8/26 9:58
 import sys
 from python.calc import Calc
-import pytest
-
+from testing.python_pytest import steps
+import pytest,yaml
+#
+@pytest.mark.parametrize("data1,data2,expect",yaml.safe_load(open('../datas/add.yaml')))
+def test_add(data1,data2,expect):
+    steps1=steps()
+    for step in steps1:
+        print(f"step===>",{step})
+        if "add"== step:
+            result=Calc().add(data1,data2)
+        elif "add1"==step:
+            result = Calc().add(data1, data2)
+        print(result)
+        assert expect==result
 #参数化，前面两个变量，后面是对应的数据
 @pytest.mark.parametrize("data1,data2,expect",[(3,3,6),(4,7,11),(12,11,33),(0.1,0.2,0.3)])
-def test_add(data1,data2,expect):
-    calc=Calc()
-    result=calc.add(data1,data2)
+def test_sum(data1,data2,expect):
+    # calc=Calc()
+    result=Calc().add(data1,data2)
     print(result)
     #eval  将字符串str当做有效的表达式来求值，并返回结果
     assert expect==result

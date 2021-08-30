@@ -2,6 +2,7 @@
 # Author:jiang
 # 2021/8/24 16:
 import pytest
+import yaml
 
 from python.calc import Calc
 class TestCalc:
@@ -15,5 +16,8 @@ class TestCalc:
         result=self.calc.div(1,2)
         print(result)
         assert 0.5==result
+def steps():
+    with open("../datas/steps.yaml") as f:
+        return yaml.safe_load(f)
 if __name__=="__main__":  #python 入口函数
     pytest.main() #需要传入字符串列表,新版本的字符串类型的参数已废弃。运行需要使用python解释器来执行
