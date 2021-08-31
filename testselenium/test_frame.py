@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Author:jiang
 # 2021/8/31 17:17
-from testselenium.base import Base
+from selenium.base import Base
 class TestFrame(Base):
 
     def test_frame(self):

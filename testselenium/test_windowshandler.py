@@ -7,7 +7,7 @@ sys.path.append("..") #添加上一级路径
 from time import sleep
 import pytest
 from selenium.webdriver import ActionChains
-from testselenium.base import Base
+from selenium.base import Base
 class TestWindowsHandler(Base):
     def test_windowsHandler(self):
         self.driver.get("https://www.baidu.com/")
