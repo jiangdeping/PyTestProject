@@ -170,10 +170,20 @@ XPATH:XML Path Language(速度比较慢)
 /bookstore/book[price>10] 选取bookstore的所有book元素，且price>10
 /bookstore/book[price>10]/title 选取bookstore的所有book元素的所有title元素，且price>10
 
+CSS Selector定位:
+浏览器操作：$('#su')
+# 表示id
+. 表示class
+> 表示子元素，层级
+
+
 ActionChains：执行PC端的鼠标点击、双击、右键、拖拽等事件
 TouchActions：模拟PC和移动端的点击、滑动、拖拽、多点触控等多种手势操作
 当用户调用ActionChains方法执行动作时，这些动作会被存储到一个ActionChains对象的队列中，此时并不会真
 正执行这些动作。而当调用perform()时，ActionChains对象中动作队列会被一一执行
+action.drag_and_drop(drag_element,drop_element).perform() #拖拽方法1
+action.click_and_hold(drag_element).release(drop_element).perform()#拖拽方法2
+
 
 selenium 如何处理多窗口：
 点击某些链接，会重新打开一个窗口，对于这种情况，想在新页面操作就需要切换窗口了
@@ -194,7 +204,32 @@ selenium执行javascript脚本，解决:
 2.页面滚动到底部，顶部
 3.处理富文本，时间控件输入等
 execute_script：执行js
-return返回js的返回结果
+return:返回js的返回结果
 execute_script：arguments传参
+JS处理时间控件思路：
+1.取消日期的readonly属性 :
+a=document.getElementById("train_date")
+a.removeAttribute('readonly')
+2.给value赋值
+3.写js代码实现如上2点，在用webdriver对js进行处理
 
+selenium文件上传：input标签可以直接使用send_keys(文件地址)上传文件
+
+弹框处理机制：
+在页面操作中会遇到JavaScript生产的alert、confirm及prompt弹框，可以使用switch_to.alert()方法定位。
+然后使用text/accept/dismiss/send_keys等方法进行操作
+操作alert常用方法：
+switch_to.alert():获取当前页面的警告框
+text:返回alert、confirm及prompt中的文字信息
+accept():接受现有警告框
+dismiss():解散现有警告框
+send_keys(keysToSend):发送文件警告框。keysToSend：将文本发送至警告框
+#snipaste  截图工具
+page Objects 六大原则：
+1.公共方法表示页面提供的服务
+2.不要暴露页面的细节
+3.Page设计中不要出现断言，应该写在测试用例类中
+4.方法应该返回其他的Page对象
+5.不要去代表整个page，如果一个页面中有很多功能，只需要对重点功能封装方法即可
+6.不同的结果返回不同的方法，不同的模式
 

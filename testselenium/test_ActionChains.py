@@ -6,7 +6,6 @@ from selenium import webdriver
 from selenium.webdriver import ActionChains
 import time
 from selenium.webdriver.common.keys import Keys
-
 class TestActionChains():
     def setup(self):
         self.driver=webdriver.Chrome()

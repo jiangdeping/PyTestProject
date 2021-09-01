@@ -20,7 +20,7 @@ class TestTouchAction():
         el_search=self.driver.find_element_by_id("su")
         el.send_keys("selenium测试")
         action=TouchActions(self.driver)
-        action.tap(el_search)
+        action.tap(el_search)  #单击操作
         action.scroll_from_element(el,0,10000) #执行滑动操作
         action.perform()
         sleep(3)
