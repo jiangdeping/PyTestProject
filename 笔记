@@ -233,3 +233,9 @@ page Objects 六大原则：
 5.不要去代表整个page，如果一个页面中有很多功能，只需要对重点功能封装方法即可
 6.不同的结果返回不同的方法，不同的模式
 
+selenium复用浏览器
+1.chrome浏览器放入环境变量
+2.在命令下执行:chrome --remote-debugging-port=9222
+3.options=Options()
+  options.debugger_address="127.0.0.1:9222"
+  driver=webdriver.Chrome(options=options)

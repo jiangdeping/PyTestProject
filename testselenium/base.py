@@ -6,7 +6,6 @@ import os
 class Base():
     def setup(self):
         browser=os.getenv("browser")
-        print(f"browser----->{browser}")
         if browser=="firefox":
             self.driver=webdriver.Firefox()
         else:
