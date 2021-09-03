@@ -225,6 +225,7 @@ accept():接受现有警告框
 dismiss():解散现有警告框
 send_keys(keysToSend):发送文件警告框。keysToSend：将文本发送至警告框
 #snipaste  截图工具
+
 page Objects 六大原则：
 1.公共方法表示页面提供的服务
 2.不要暴露页面的细节

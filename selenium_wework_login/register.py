@@ -8,7 +8,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 
 class Register():
     def __init__(self,driver:WebDriver):
-        self._driver=driver
+        self._driver=driver 
     def register(self):
         sleep(2)
         self._driver.find_element(By.ID,'corp_name').send_keys("hello222")

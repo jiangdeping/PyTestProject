@@ -18,7 +18,7 @@ class Index:
         return Login(self._driver)
     def goto_register(self):
         element=self._driver.find_element(By.CSS_SELECTOR, '.index_head_info_pCDownloadBtn')
-        action=ActionChains
+        action=ActionChains(self._driver)
         action.click(element).perform()
         # self._driver.find_element(By.CSS_SELECTOR, '.index_head_info_pCDownloadBtn').click()
         return Register(self._driver)
