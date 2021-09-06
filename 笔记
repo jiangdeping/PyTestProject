@@ -240,3 +240,18 @@ selenium复用浏览器
 3.options=Options()
   options.debugger_address="127.0.0.1:9222"
   driver=webdriver.Chrome(options=options)
+
+
+appnium安装环境搭建：https://www.cnblogs.com/fnng/p/4540731.htmlhttps://www.cnblogs.com/fnng/p/4540731.html
+1.JDK 1.8及以上版本安装
+2.SDK安装及环境变量配置 ：http://tools.android-studio.org/index.php/sdk
+   ANDROID_HOME D:\android-sdk-windows
+   PATH  %ANDROID_HOME%\tools;%ANDROID_HOME%\platform-tools
+   查看安装成功  adb
+3.appium环境安装及客户端安装：
+  1.下载安装包安装：https://github.com/appium/appium-desktop/releases
+    npm安装:
+     需要先装 node.js
+     npm install -g cnpm --registry==https://registry.npm.taobao.org
+     cnpm install -g appium
+  2.pip install appnium-client
