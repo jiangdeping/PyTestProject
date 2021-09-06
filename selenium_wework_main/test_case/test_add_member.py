@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Author:jiang
 # 2021/9/3 11:19
-from time import sleep
 
 from selenium_wework_main.page.main import Main
 
