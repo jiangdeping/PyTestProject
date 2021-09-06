@@ -22,5 +22,5 @@ class TestJs(Base):
         self.driver.get("https://www.12306.cn/index/")
         print(self.driver.execute_script('return document.getElementById("train_date").value'))
         self.driver.execute_script('a=document.getElementById("train_date");a.value="2021-12-12"')
-        sleep(4)
+        sleep(5)
         print(self.driver.execute_script('return document.getElementById("train_date").value'))
