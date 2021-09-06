@@ -10,7 +10,7 @@ class TestAddMember:
     def test_index_addmember(self):
         add_member=self.main.goto_index_add_member()
         add_member.add_member()
-        assert  "张三" in add_member.get_member()
+        assert "张三" in add_member.get_member()
     def test_member_addmember(self):
         add_member = self.main.goto_member_add_member()
         add_member.add_member()
