@@ -249,9 +249,21 @@ appnium安装环境搭建：https://www.cnblogs.com/fnng/p/4540731.htmlhttps://w
    PATH  %ANDROID_HOME%\tools;%ANDROID_HOME%\platform-tools
    查看安装成功  adb
 3.appium环境安装及客户端安装：
-  1.下载安装包安装：https://github.com/appium/appium-desktop/releases
-    npm安装:
-     需要先装 node.js
+  方法一：下载安装包安装：https://github.com/appium/appium-desktop/releases
+  方法二：npm安装:   需要先装 node.js
      npm install -g cnpm --registry==https://registry.npm.taobao.org
      cnpm install -g appium
-  2.pip install appnium-client
+4.安装appnium-client：pip install appium-python-client
+5.安装appium-doctor:npm install appium-doctor  查看appium安装信息
+6.安装网易mumu模拟器：https://mumu.163.com/
+ 无法连接网易mumu：D:\MuMu\emulator\nemu\vmonitor\bin下执行：adb connect 127.0.0.1:7555
+ 使用教程：https://www.pianshen.com/article/27411242829/
+
+Capability设置：
+ "platformName": "android",
+  "deviceName": "127.0.0.1:7555",
+  "appPackage": "com.xueqiu.android",
+  "appActivity": ".view.WelcomeActivityAlias",
+  "noReset": True #测试前后是否重置相关测试环境
+  "unicodeKeyboard":False  #启用 Unicode 输入，默认 false
+  "resetKeyboard":True 键盘重置为其原始状态 true 或者 false
