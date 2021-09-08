@@ -157,18 +157,31 @@ chromedriver下载地址：http://npm.taobao.org/mirrors/chromedriver
 webdriver
 IDE：录制
 Grid：分布式
-等待,直到显示：WebDriverWait(self.driver,10).until(expected_conditions.element_to_be_clickable(()))
 
-XPATH:XML Path Language(速度比较慢)
+隐示等待：implicitly_wait   #放入setup方法中
+显示等待：WebDriverWait(self.driver,10).until(expected_conditions.element_to_be_clickable(())) #查找元素使用
+
+
+xpath：xml路径语言，用于xml的节点定位
+XPATH:Path Language(速度比较慢)
 /从根节点选取   //从匹配选择的当前节点选择文档中的节点，不考虑他们的位置
 . 选择当前节点   ..选择当前节点的父节点  @选取属性
 /bookstore/book[1]      选取属于bookstore子元素的第一个book元素
 /bookstore/book[last()]  选取属于bookstore子元素的最后一个book元素
 /bookstore/book[last()-1] 选取属于bookstore子元素的倒数第二book元素
 /bookstore/book[position()<3]  选取最前面的2个属于bookstore元素的子元素的book元素
+//title[@lang]  选取所有拥有名为lang属性的title元素
 //title[@lang="eng"]  选取所有title元素，这些元素拥有值为eng的lang属性
 /bookstore/book[price>10] 选取bookstore的所有book元素，且price>10
 /bookstore/book[price>10]/title 选取bookstore的所有book元素的所有title元素，且price>10
+选取未知节点：
+* 匹配任何元素节点
+@*匹配任何属性节点
+node[]匹配任何类型的节点
+/bookstore/* 选取bookstore元素的子元素
+//*选取文档中的所有元素
+//title[@*]选取所有带有属性title的元素
+
 
 CSS Selector定位:
 浏览器操作：$('#su')
@@ -242,7 +255,19 @@ selenium复用浏览器
   driver=webdriver.Chrome(options=options)
 
 
-appnium安装环境搭建：https://www.cnblogs.com/fnng/p/4540731.htmlhttps://www.cnblogs.com/fnng/p/4540731.html
+元素的常用方法  （appium selenium均可用）
+是否可见 is_displayed()
+是否可用 is_enalberd()
+是否被选择 is_selected()
+获取属性 get_attribute()
+清除 clear
+设置元素值 ser_value()
+元素常用的属性： （appium selenium均可用）
+元素文本 text
+元素坐标 locationg
+元素尺寸 size
+------------------appium-----------------
+appium安装环境搭建：https://www.cnblogs.com/fnng/p/4540731.htmlhttps://www.cnblogs.com/fnng/p/4540731.html
 1.JDK 1.8及以上版本安装
 2.SDK安装及环境变量配置 ：http://tools.android-studio.org/index.php/sdk
    ANDROID_HOME D:\android-sdk-windows
@@ -267,3 +292,71 @@ Capability设置：
   "noReset": True #测试前后是否重置相关测试环境
   "unicodeKeyboard":False  #启用 Unicode 输入，默认 false
   "resetKeyboard":True 键盘重置为其原始状态 true 或者 false
+
+
+
+Android七大布局：
+线性布局：LinearLayout
+相对布局:RelativeLayout
+帧布局：FrameLayout
+绝对布局:AbsoluteLayout
+表布局:TableLayout
+网格布局：GridLayout
+约束布局：ConstrainLayout
+
+四大组件：
+activity：与用户交互的可视化的界面
+service：实现程序后台运行的解决方案
+content provider：内容提供者，提供程序所需要的数据
+broadcast receiver：广播接收器,监听外部事件的到来
+
+常用控件：
+TextView:文本控件    EditText：可编辑文本控件
+Button：按钮  ImageButton：图片按钮  ToggleButton：开关按钮
+imageView：图片控件
+Checkbox：复选框控件   RadioButton：单选框控件
+
+测试步骤三要素：定位、交互、断言
+定位方式：id,accessibility_id,xpath、uiautomator定位
+id:resource-id
+accessibility_id:content-desc
+
+uiautomator定位：
+基本语法：driver.find_element_by_android_uiautomator(xx)
+1.通过text文本定位语法:
+    new UiSelector().text("text文本")
+2.如果文本比较长，可以用textContains模糊匹配:
+    new UiSelector().textContains("包含text文本")
+3.textStartsWith是以某个文本开头来匹配:
+    new UiSelector().textStartsWith("以text文本开头")
+4.正则表达式textMatches匹配：
+    new UiSelector().textMatches("正则表达式")
+5.resourceId定位：new UiSelector().resourceId("id")
+6.className定位：new UiSelector().className("className")
+7.description定位：new UiSelector().description("contenet-des属性")
+8.组合定位：
+  id与text属性组合：'new UiSelector().resourceId("com.baidu.yuedu:id/webbooktitle").text("小说")'
+  class与text属性组合：'new UiSelector().className("android.widget.TextView").text("图书")'
+9.关系定位：
+ 父子定位childSelector：'new UiSelector().resourceId("com.baidu.yuedu:id/rl_tabs").childSelector(text("小说"))'
+ 兄弟定位fromParent： 'new UiSelector().resourceId("com.baidu.yuedu:id/lefttitle").fromParent(text("图书"))'
+10.滚动查找元素定位：new UiScrollable(new UiSelector().scrollable(true).instance(0)).
+scrollIntoView(new UiSelector().text("李一恩的投资组合").instance(0))
+
+uiautomatoreviewer工具(only andriod)
+
+TouchAction：
+press:按下
+release：释放
+movuTo:移动
+tap：点
+wait：等待
+longpress：长按
+cancel：取消
+perform：执行
+MultiTouch: 多点触摸
+
+等待：
+隐示等待：implicitly_wait   #放入setup方法中
+显示等待：WebDriverWait(self.driver,10).until(expected_conditions.element_to_be_clickable(())) #查找元素使用
+
