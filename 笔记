@@ -56,11 +56,12 @@ python_functions="case*"
 pytest失败重新运行：
 pip install pytest-rerunfailures
 pytest --reruns 3  --reruns-delay 2  -v -s 文件名.py  #--reruns 3 重新执行的次数 --reruns-delay 2 等待2s执行
-运行时间：07-07-51:00
 
-pytest 多条断言有失败也都运行
+
+断言：assert
+通常一个用例我们会写多个断言，有时候我们希望第一个断言失败后，后面能继续断言，pytest-assume插件可以解决断言失败后继续断言的问题
 pip install pytest-assume
-pytest.assume(表达式)
+pytest.assume(x == y)
 
 pycharm 配置与执行pytest测试框架
 pytest.main("-v -x TestDemo") 、pytest.main(['-v','-s','TestDemo'])等同
@@ -267,6 +268,19 @@ selenium复用浏览器
 元素坐标 locationg
 元素尺寸 size
 ------------------appium-----------------
+appnium设计原理
+客户端：python3,appnium-python-client
+服务端：
+方法一：appium-desktop：appium inspector 录制功能和appium server
+方法二：appium server
+ node js>=10,建议12.*版本，npm>=6
+ npm install -g cnpm --registry==https://registry.npm.taobao.org
+ cnpm install -g appium
+3.手机端（被测设备）：
+ Android 设备，可以在运行在window、MacOS、Linux环境
+ ios 设备：必须在MacOS系统
+ 模拟器
+
 appium安装环境搭建：https://www.cnblogs.com/fnng/p/4540731.htmlhttps://www.cnblogs.com/fnng/p/4540731.html
 1.JDK 1.8及以上版本安装
 2.SDK安装及环境变量配置 ：http://tools.android-studio.org/index.php/sdk
@@ -275,7 +289,7 @@ appium安装环境搭建：https://www.cnblogs.com/fnng/p/4540731.htmlhttps://ww
    查看安装成功  adb
 3.appium环境安装及客户端安装：
   方法一：下载安装包安装：https://github.com/appium/appium-desktop/releases
-  方法二：npm安装:   需要先装 node.js
+  方法二：npm安装:   需要先装 node.js   node js>=10,建议12.*版本，npm>=6
      npm install -g cnpm --registry==https://registry.npm.taobao.org
      cnpm install -g appium
 4.安装appnium-client：pip install appium-python-client
@@ -283,6 +297,20 @@ appium安装环境搭建：https://www.cnblogs.com/fnng/p/4540731.htmlhttps://ww
 6.安装网易mumu模拟器：https://mumu.163.com/
  无法连接网易mumu：D:\MuMu\emulator\nemu\vmonitor\bin下执行：adb connect 127.0.0.1:7555
  使用教程：https://www.pianshen.com/article/27411242829/
+ 真机：1.打开调试模式 2.安装驱动程序（如豌豆荚）
+
+
+adb命令安装应用：https://developer.android.google.cn/studio/command-line/adb
+ adb install 名称.apk  -r 覆盖安装 -s 选择安装设备
+adb组件：adb client、adb server、adbd
+adb client：用户发送命令。在开发计算机上运行，通过发送adb命令从命令行终端调用客户端
+adb server：管理客户端与守护进程之间的通信。服务器在开发机器上作为后台进程运行
+adbd(守护进程)：在设备上运行命令，在每个设备上作为后台进程运行
+appium -p 端口号：命令启用appium服务
+ 常用端口分析：
+ 4723：appium提供的默认端口号,接受客户端发来请求
+ 5037：adb server 与adb client通讯的端口
+ 7555：mumu模拟器的端口
 
 Capability设置：
  "platformName": "android",
@@ -293,6 +321,14 @@ Capability设置：
   "unicodeKeyboard":False  #启用 Unicode 输入，默认 false
   "resetKeyboard":True 键盘重置为其原始状态 true 或者 false
 
+Capability进阶：
+newCommandTimeout: 隐式等待超时时间，默认是60s
+udid：设备的唯一标识，未设置udid时默认取devices列表的第一个设备
+autoGrantPermissions：授予弹框的权限，自动点击确认。默认false
+noRest：测试前后是否重置相关测试环境 noreset=true
+fullRest：清空数据并卸载app，使app保持干净环境
+dontStopAppOnRest：首次启动的时候，不停止app（可以调试或者运行的时候提升运行速度）
+skipDeviceInitialization  跳过安装，权限设置等操作（可以调试或者运行的时候提升运行速度）
 
 
 Android七大布局：
@@ -317,7 +353,7 @@ imageView：图片控件
 Checkbox：复选框控件   RadioButton：单选框控件
 
 测试步骤三要素：定位、交互、断言
-定位方式：id,accessibility_id,xpath、uiautomator定位
+定位方式：id(优先级最高),accessibility_id(其次),xpath(速度慢定位灵活)、uiautomator定位(速度快语法复杂)
 id:resource-id
 accessibility_id:content-desc
 
@@ -358,5 +394,62 @@ MultiTouch: 多点触摸
 
 等待：
 隐示等待：implicitly_wait   #放入setup方法中
-显示等待：WebDriverWait(self.driver,10).until(expected_conditions.element_to_be_clickable(())) #查找元素使用
+显示等待：处理隐示等待无法解决的一些问题
+WebDriverWait(self.driver,10).until(expected_conditions.element_to_be_clickable(locator)) #查找元素使用
 
+toast控件识别：简易的消息提示框
+必须使用xpath查找 ：
+//*[@class='andriod.widget.Toast']
+//*[@contains(@text,'xxxx')]
+
+断言：
+普通断言：assert
+Hamcrest断言：
+
+app参数化用例:与pytest一致
+
+WebView
+域套接字：进程与进程之前的一种方式
+客户端与服务器建立连接，需要有共同的套接字和相应的服务器端口
+套接字会处于监控状态，监听客户端发来的请求
+获取webview的进程
+adb shell cat /proc/net/unix grep "webview"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+emulator：ERROR：This AVD's configuration is missing a kernel file! 解决方法：
+原因是kernal file的名称不正确。
+找到.android\avd\你的虚拟设备.avd下的config.ini。
+查找image.sysdir.1属性。
+我的值是system-images\android-28\google_apis_playstore\x86\。
+system-images在sdk目录下。
+然后顺着image.sysdir.1的路径，看看该路径下有没有对应的kernel-qemu。
+如果没有把kernel-ranchu-64改成该文件名。
+
+
+emulator: ERROR: x86 emulation currently requires hardware acceleration!
+Please ensure Intel HAXM is properly installed and usable.
+CPU acceleration status: HAX kernel module is not installed!
+安装D:\android-sdk-windows\extras\intel\Hardware_Accelerated_Execution_Manager下的intelhaxm-android.exe文件

@@ -15,7 +15,7 @@ class Testappniumdemo:
     def setup(self):
         desiredcaps = {}
         desiredcaps["platformName"] = "android"
-        desiredcaps["deviceName"] = "127.0.0.1:7555"
+        desiredcaps["udid"] = "77c1ca380903" #未设置udid，默认取devices列表的第一个设备
         desiredcaps["appPackage"] = "com.xueqiu.android"
         desiredcaps["appActivity"] = ".view.WelcomeActivityAlias"
         desiredcaps["noReset"] = True
@@ -35,7 +35,7 @@ class Testappniumdemo:
         :return:
         """
 
-        self.driver.find_element_by_id("com.xueqiu.android:id/tv_search").click()
+        self.driver.find_element_by_id("com.xueqiu.android:id/home_search").click()
         self.driver.find_element_by_id("com.xueqiu.android:id/search_input_text").send_keys("阿里巴巴")
         self.driver.find_element_by_xpath("//*[@resource-id='com.xueqiu.android:id/name' and @text='阿里巴巴']").click()
         elements=self.driver.find_elements_by_id("com.xueqiu.android:id/current_price")
@@ -44,7 +44,7 @@ class Testappniumdemo:
         # assert current_price<200
         self.driver.back()
     def test_attr(self):
-        element=self.driver.find_element_by_id("com.xueqiu.android:id/tv_search")
+        element=self.driver.find_element_by_id("com.xueqiu.android:id/home_search")
         print(element.text)
         print(element.location)
         print(element.size)
