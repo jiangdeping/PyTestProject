@@ -301,6 +301,7 @@ appium安装环境搭建：https://www.cnblogs.com/fnng/p/4540731.htmlhttps://ww
 
 
 adb命令安装应用：https://developer.android.google.cn/studio/command-line/adb
+https://yinleilei.blog.csdn.net/article/details/87897863?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link
  adb install 名称.apk  -r 覆盖安装 -s 选择安装设备
 adb组件：adb client、adb server、adbd
 adb client：用户发送命令。在开发计算机上运行，通过发送adb命令从命令行终端调用客户端
@@ -329,6 +330,7 @@ noRest：测试前后是否重置相关测试环境 noreset=true
 fullRest：清空数据并卸载app，使app保持干净环境
 dontStopAppOnRest：首次启动的时候，不停止app（可以调试或者运行的时候提升运行速度）
 skipDeviceInitialization  跳过安装，权限设置等操作（可以调试或者运行的时候提升运行速度）
+appium 设置时间waitForIdleTimeout
 
 
 Android七大布局：
