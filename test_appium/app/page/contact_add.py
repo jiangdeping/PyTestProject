@@ -4,6 +4,7 @@
 from appium.webdriver.common.mobileby import MobileBy
 
 from test_appium.app.page.base_page import BasePage
+from test_appium.app.page.base_page import BasePage
 from test_appium.app.page.member_invite import MemberInvite
 
 class ContactAdd(BasePage):
@@ -24,9 +25,17 @@ class ContactAdd(BasePage):
         element=self._driver.find_element(MobileBy.XPATH,"//*[contains(@text,'添加成功')]")
         # element=self._driver.find_element(MobileBy.XPATH, "//*[@class='android.widget.Toast']")
         return element.text
-    def get_repeat(self):
-        element = self._driver.find_element(MobileBy.ID, "com.tencent.wework:id/c0s")
-        text=element.text
-        self._driver.find_element(MobileBy.ID,"com.tencent.wework:id/c0w").click()
-        self._driver.find_element(MobileBy.ID,'com.tencent.wework:id/iza').click()
+    # def get_repeat(self):
+    #     element = self._driver.find_element(MobileBy.ID, "com.tencent.wework:id/c0s")
+    #     text=element.text
+    #     self._driver.find_element(MobileBy.ID,"com.tencent.wework:id/c0w").click()
+    #     self._driver.find_element(MobileBy.ID,'com.tencent.wework:id/iza').click()
+    #     return text
+
+    def get_repeat1(self):
+        ele=self.find(MobileBy.ID, "com.tencent.wework:id/c0s")
+        # element = self._driver.find_element(MobileBy.ID, "com.tencent.wework:id/c0s")
+        text=ele.text
+        # self._driver.find_element(MobileBy.ID,"com.tencent.wework:id/c0w").click()
+        self.find(MobileBy.ID,'com.tencent.wework:id/iza').click()
         return text

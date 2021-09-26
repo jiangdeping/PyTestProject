@@ -13,4 +13,4 @@ class TestContact:
     def test_repeataddcontact(self):
         element=self.main.goto_addresslist().add_member().addmember_by_manul().\
             input_name().input_phone().click_save()
-        assert "已存在于通讯录"in element.get_repeat()
+        assert "已存在于通讯录"in element.get_repeat1()
