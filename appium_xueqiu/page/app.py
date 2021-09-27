@@ -24,7 +24,7 @@ class App(BasePage):
             self._driver = webdriver.Remote("http://127.0.0.1:4727/wd/hub", desiredcaps)  # 创建连接，固定写法
         else:
             self._driver.launch_app()#直接启动应用
-        self._driver.implicitly_wait(20)
+        self._driver.implicitly_wait(3)
         return self
     def restart(self):
         pass
