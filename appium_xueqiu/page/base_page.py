@@ -26,6 +26,8 @@ class BasePage:
         self._driver=driver
     def set_implicitly(self,time):
         self._driver.implicitly_wait(time)
+    def screenshot(self,name):
+        self._driver.save_screenshot(name)
     def finds(self,locator,value:str=None):
         elements:list #返回值是list
         if isinstance(locator, tuple):
@@ -35,8 +37,8 @@ class BasePage:
         return elements
     @handle_black
     def find(self,locator,value:str=None):
-        logging.info(locator)
-        logging.info(value)
+        # logging.info(locator)
+        # logging.info(value)
         element:WebElement
         if isinstance(locator,tuple):
             element=self._driver.find_element(*locator)
@@ -55,7 +57,7 @@ class BasePage:
         with open(path,encoding="utf-8") as f:
             name=inspect.stack()[1].function #获取当前被调用的函数名
             steps=yaml.safe_load(f)[name]
-        #yaml文件进行参数化
+        #yaml文件内容进行参数化
         raw=json.dumps(steps)
         for key,value in self._params.items():
             raw=raw.replace(f'${{{key}}}',value) #f语法  {{}}转义 -> 代表{}  {key}:变量名称

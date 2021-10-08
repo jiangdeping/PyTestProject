@@ -18,6 +18,6 @@ class Search(BasePage):
     def reset(self,name):
         self._params["name"] = name
         return self.steps('../page/search.yaml')
-    # def cancel(self,name):
-    #     self._params["name"] = name
-    #     return self.steps('../page/search.yaml')
+    def cancel(self,name):
+        self._params["name"] = name
+        return self.steps('../page/search.yaml')

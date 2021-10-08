@@ -21,8 +21,8 @@ reset:
   - by: xpath
     locator: '//*[contains(@resource-id,"ll_stock_item_container")]//*[@text="${name}"]/../..//*[@text="已添加"]'
     action: click
-#
-#cancel:
-#  - by: id
-#    locator: 'com.xueqiu.android:id/action_close'
-#    action: click
+
+cancel:
+  - by: id
+    locator: 'com.xueqiu.android:id/action_close'
+    action: click

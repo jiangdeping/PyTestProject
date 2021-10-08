@@ -443,11 +443,82 @@ skipLogcatCapture：与日志相关的命令将不起作用。默认为false.
 不要重复自己的工作:创建函数、创建类
 实现元编程方法：装饰器，类装饰器，元类
 
+scrcpy录像
+下载地址：https://github.com/Genymobile/scrcpy/releases
+
+monkey：https://developer.android.com/studio/test/monkey
+基本配置选项：设置操作数量
+操作约束:对指定app进行测试
+事件类型和频率
+调试选项
+adb shell monkey 100 对所有包随机操作次数
+adb shell monkey -p com.xueqiu.android 100 对指定包
+adb shell monkey -p com.xueqiu.android -s 20 80 时间种子
+adb shell monkey -p com.xueqiu.android -vv -s 20 80 详细日志（-v：1级日志 -vv：2级日志）
+adb shell monkey -p com.xueqiu.android --throttle 500 100 时间间隔（多少时间执行一次）
+adb shell monkey -p com.xueqiu.android  --pct-touch 80 100 事件百分比
+--pct-touch：触摸事件，比如点击
+--pct-motion：动作事件 比如滑动、直线
+--pct-trackball：轨迹事件，比如移动+点击
+--pct-majornav:主要导航事件，比如回退按键、菜单按键
+--pct-nav：导航事件（点击设备的上下左右按键）
+多设备运行monkey：
+#/bin/bash
+devices=`adb devices|grep 'device\>'|awk '{print $1}'`
+for device in $devices
+        do
+        echo $device
+        #nohup 后台运行
+        { nohup adb -s $device shell monkey -p com.xueqiu.android --pct-touch 30 --pct-motion 20 --pct-trackball 30 --pct-majornav 20 -v --throttle 50 100 &}
+        done
 
 
+maxim:Android Mokney进行改进，基于遍历规则、高性能
+下载地址：https://github.com/zhangzhao4444/Maxim
 
+appcrawer：自动化遍历工具
+OpenSTF:https://github.com/openstf/stf 对手机远程管理
+基于jenkins的自动化调度详解：
 
+selenium Grid:主旨多个机器运行,appium支持Selenium Grid
+selenium grid下载地址：https://www.selenium.dev/downloads
+appium node结点配置：http://appium.io/docs/en/advanced-concepts/grid
+工作流程：
+1.启动selenium hub:切换到jar所在目录执行
+ java -jar selenium-server-standalone-3.141.59.jar -role hub
 
+2.启动appium server node结点命令：
+appium -p 4723 --nodeconfig  xxx.json
+appium -p 4724 --nodeconfig  xxx.json
+
+3.appium node结点配置：
+{
+  "capabilities":
+      [
+        {
+          "browserName": "ANDROID",
+          "devicesName":"77c1ca380903",
+          "version":"6.0",
+          "maxInstances": 1,
+          "platform":"ANDROID"
+        }
+      ],
+  "configuration":
+  {
+    "cleanUpCycle":2000,
+    "timeout":30000,
+    "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
+    "url":"http://192.168.1.189:4723/wd/hub",
+    "host": "192.168.1.189",
+    "port": 4723,
+    "maxSession": 1,
+    "register": true,
+    "registerCycle": 5000,
+    "hubPort": 4444,
+    "hubHost": "192.168.1.189",
+    "hubProtocol": "http"
+  }
+}
 
 
 

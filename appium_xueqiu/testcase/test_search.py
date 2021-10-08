@@ -19,5 +19,5 @@ class TestSearch():
         if self.search.is_choose(name):
             self.search.reset(name)
         self.search.add(name)
-        # self.search.cancel(name)
         assert self.search.is_choose(name)
+        self.search.cancel(name)
