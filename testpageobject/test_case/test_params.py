@@ -17,7 +17,7 @@ class TestMain:
         s=yaml.safe_load(open('../test_case/test_main.yaml'))
         print(s)
     def test_parms(self):
-        vars=[(1,2),(3,4)]
+        vars=[(7,2),(3,9)]
         def sum(a,b):
             return a+b
         for i in vars:

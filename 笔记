@@ -1,11 +1,21 @@
+https://www.jb51.net/article/173665.htm
+多个装饰器的时候总结：
+1.加载顺序：自下而上
+2.执行顺序：函数调用前的:自上而下，函数调用后的:自下而上
+python内置装饰器：
+特性装饰器：@property　可以把一个实例方法变成其同名属性，以支持实例访问　
+类方法装饰器：@classmethod  修饰的方法不需要实例化，不需要 self 参数，但第一个参数需要是表示自身类的
+   cls 参数，可以来调用类的属性，类的方法，实例化对象等。
+静态方法装饰器：@staticmethod 当需要一个不访问类的任何属性，但它又属于该类的实用函数时就可以用静态方法，
+   它只处理传入的参数.静态方法可以直接通过类进行调用，也可以通过实例进行调用
+
 __init__.py or __all__=[]  #指对外开放有哪些内容,  调用方式必须 from * import * 方式导入
 python 3.3版本 以后不需要__init__.py 文件也可以直接调用
 浮点数精度问题：Decimal("0.1")+Decimal("0.2")
 导出依赖包：
-pip install -r requirements.txt
-pip free >requirements.txt
+pip free >requirements.txt   导出所有依赖包及其精确的版本号
+pip install -r requirements.txt  安装依赖包所有文件
 ----------------pytest------------
-<<<<<<< HEAD
 相关包安装：
 pip install  pytest                ---pytest框架
 pip install  allure-pytest         ---生成allure报告
@@ -18,8 +28,7 @@ pip install pytest-html            ---测试报告
 pip install PyYAML                 ---yaml安装
 pip install allure-pytest          ---测试allure-pytest插件
 pip install pytest-ordering        ---测试用例顺序执行
-=======
->>>>>>> parent of e736816 (2021/8/25:fix)
+===================================================
 终端执行
 pytest -v -s  文件名.py （-v 打印详细运行日志信息  -s带控制台输出结果）
 pytest 文件名.py::类名 运行摸个模块里面的某个类
@@ -41,7 +50,7 @@ conftest.py文件:将需要共享的公共模块放在该文件，该文件放�
 改写一些方法，改写执行顺序
 改写方法，自动添加标签
 配置注意事项：
-conftest.py文件名是不能更换的，与运行的用例放在同一package下
+conftest.py文件名是不能更换的，与运行的用例放在同一package下,只对同一package里面的用例生效
 
 pytest.ini 配置文件
 改变pytest运行的行为
@@ -121,7 +130,7 @@ allure:
 安装：
 1.安装jdk1.8+(百度网盘)
 2.安装Allure(百度网盘)
-  解压并进入bin目录，运行allure.bat，将bin路径添加allure到环境变量PATH
+  解压并进入bin目录,运行allure.bat，将bin路径添加allure到环境变量PATH
 3.安装allure—pytest插件
 步骤：
 1.测试执行期间收集执行结果
@@ -443,6 +452,8 @@ skipLogcatCapture：与日志相关的命令将不起作用。默认为false.
 不要重复自己的工作:创建函数、创建类
 实现元编程方法：装饰器，类装饰器，元类
 
+
+
 scrcpy录像
 下载地址：https://github.com/Genymobile/scrcpy/releases
 
@@ -477,7 +488,37 @@ maxim:Android Mokney进行改进，基于遍历规则、高性能
 下载地址：https://github.com/zhangzhao4444/Maxim
 
 appcrawer：自动化遍历工具
+下载地址：https://github.com/seveniruby/AppCrawler
+执行命令：java -jar appcrawler-2.4.0-jar-with-dependencies.jar
+生成demo文件：java -jar appcrawler-2.4.0-jar-with-dependencies.jar --demo
+运行demo文件：java -jar  appcrawler-2.4.0-jar-with-dependencies.jar  -c demo2.yml
+动作支持action：
+    back 后退
+    backApp 回退到当前app默认
+    monkey 随机事件
+    xxx()执行代码：Thread.sleep(30)/driver.swipe(0.9,0.5,0.1,0.5)
+    click
+    longTap
+triggerActions:触发器
+    需要特定次数的触发动作
+    通常用于处理弹框：
+    xpath：指定具体按钮
+    action：动作
+    times：规则的使用次数
+
+遍历流程
+    1.信息的获取：把当前app的界面dump为xml结构
+    2.获取待遍历元素：
+    >遍历范围：selectedList
+    >过滤黑名单 小控件 不可见控件：blackList
+    >重排控件顺序 firstList lastList
+    >跳过已点击+跳过限制点击的控件 tagLimit
+    >根据匹配的规则执行action
+    3.循环上面的步骤
+
+
 OpenSTF:https://github.com/openstf/stf 对手机远程管理
+
 基于jenkins的自动化调度详解：
 
 selenium Grid:主旨多个机器运行,appium支持Selenium Grid
@@ -520,17 +561,20 @@ appium -p 4724 --nodeconfig  xxx.json
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
+-------------------------
+接口测试
+TCP/IP:应用层、传输层、网络层、网络接口层
+应用层：DNS：域名解析、TELNET:远程终端协议、HTTP：超文本传输协议、FTP:文件传输协议、SMTP:发邮件协议、POP3:收邮件协议
+传输层：TCP/UDP
+网络层：IP、ARP、RARP、ICMP、IGMP
+网络接口层：各种通信网络接口(以太网等) 物理网络
+TCP:面向连接、错误重传、拥塞控制，适用于可靠性高的场景
+UDP：不需要提前建立连接、实现简单、适用于实时性高的场景
+post：新增或更新
+get:获取资源
+put：更新资源
+delete：删除资源
+抓包工具：
 
 
 emulator：ERROR：This AVD's configuration is missing a kernel file! 解决方法：

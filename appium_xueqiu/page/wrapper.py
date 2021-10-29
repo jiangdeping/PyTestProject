@@ -30,7 +30,7 @@ def handle_black(func):
             with open("tmp.png","rb")as f:
                 content=f.read()
             allure.attach(content,attachment_type=allure.attachment_type.PNG) #截图
-            logging.info("element not fountd,handle black list ")
+            logging.info("element not found,handle black list ")
             instance._driver.implicitly_wait(1)
             if _error_num>_max_num:
                 raise e
