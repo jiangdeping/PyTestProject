@@ -13,8 +13,8 @@ __init__.py or __all__=[]  #指对外开放有哪些内容,  调用方式必须 
 python 3.3版本 以后不需要__init__.py 文件也可以直接调用
 浮点数精度问题：Decimal("0.1")+Decimal("0.2")
 导出依赖包：
-pip free >requirements.txt   导出所有依赖包及其精确的版本号
-pip install -r requirements.txt  安装依赖包所有文件
+pip free >requirements.txt   导出所有依赖包及其版本号
+pip install -r requirements.txt  安装所有依赖包
 ----------------pytest------------
 相关包安装：
 pip install  pytest                ---pytest框架
@@ -52,15 +52,14 @@ conftest.py文件:将需要共享的公共模块放在该文件，该文件放�
 配置注意事项：
 conftest.py文件名是不能更换的，与运行的用例放在同一package下,只对同一package里面的用例生效
 
-pytest.ini 配置文件
-改变pytest运行的行为
-“”“
+pytest.ini 配置文件:改变pytest运行的行为
+
 [pytest]
 addopts=--alluredir=./result/1
-python_files="abc_*py"
-python_classes="Login*"
-python_functions="case*"
-“”“
+python_files="abc_*py"  #文件识别规则
+python_classes="Login*" #类识别规则
+python_functions="case*"#方法识别规则
+
 
 pytest失败重新运行：
 pip install pytest-rerunfailures
@@ -395,7 +394,7 @@ uiautomatoreviewer工具(only andriod)
 TouchAction：
 press:按下
 release：释放
-movuTo:移动
+moveTo:移动
 tap：点
 wait：等待
 longpress：长按
@@ -570,11 +569,47 @@ TCP/IP:应用层、传输层、网络层、网络接口层
 网络接口层：各种通信网络接口(以太网等) 物理网络
 TCP:面向连接、错误重传、拥塞控制，适用于可靠性高的场景
 UDP：不需要提前建立连接、实现简单、适用于实时性高的场景
-post：新增或更新
+抓包工具：
+
+restful构架：
+1.每一个URL代表一种资源
+2.客户端和服务器之前，传递这种资源的某种表现
+3.客户端通过四个HTTP动词，对服务器资源进行操作，实现表现层状态转化
+四个动作：
+post：新增或更新资源
 get:获取资源
 put：更新资源
 delete：删除资源
-抓包工具：
+requests文档api：
+https://docs.python-requests.org/zh_CN/latest/user/quickstart.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 emulator：ERROR：This AVD's configuration is missing a kernel file! 解决方法：
