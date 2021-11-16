@@ -11,7 +11,6 @@ class Address(BaseApi):
         corpsecret = "7gqpOvV5-NwiXckj6aibBSMQ5h9C_YbV2kYteqIUUfo"
         self.token=WeWork().get_token(corpsecret)
     def create(self,userid, name, mobile):
-
         data={
             "method": "post",
             "url":"https://qyapi.weixin.qq.com/cgi-bin/user/create",
@@ -42,7 +41,9 @@ class Address(BaseApi):
         data = {
             "method": "get",
             "url": "https://qyapi.weixin.qq.com/cgi-bin/user/delete",
-            "params": {"access_token": self.token},
-            "userid":userid
+            "params": {
+                "access_token": self.token,
+                "userid": userid
+            }
         }
         return self.send(**data)
