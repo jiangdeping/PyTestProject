@@ -1,4 +1,11 @@
 linux常见命令：
+wc -l 统计多少行
+diff 文件进行比较
+"uname -a "：可显示电脑以及操作系统的相关信息
+"cat /proc/version"：说明正在运行的内核版本
+"cat /etc/issue"： 显示的是发行版本信息
+nohup  命令  &:后台运行命令
+
 ps --help 查看所有命令选项及说明
 a、显示所有的进程  ps -A
 b、显示指定用户的进程（这里选定root用户） ps -u root
@@ -24,27 +31,29 @@ linux三剑客：awk grep sed
 管道：linux提供管道符"|"将两个命令分开，管道符左边的命令的输出作为管道符右边命令的输入
 
 正则表达式：
+标准正则：
 .:匹配除换行符 \n 之外的任何单字符。要匹配 . ，请使用 \.
-*:匹配前面的子表达式零次或多次。要匹配 * 字符，请使用 \*
-+:匹配前面的子表达式一次或多次。要匹配 + 字符，请使用 \+
-?:匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。要匹配 ? 字符，请使用 \?
-():标记一个子表达式的开始和结束位置。子表达式可以获取供以后使用。要匹配这些字符，请使用 \( 和 \)
-{n}:重复n次   {n,}:重复n次以上  {n,m}:重复n到m次
-\w：匹配字母或数字或下划线或汉字
 \s：匹配任意的空白符
 \d：匹配数字
 \b：匹配单词的开始或结束
 ^：匹配字符串的开始
 $：匹配字符串的结束
+*:匹配前面的子表达式零次或多次。要匹配 * 字符，请使用 \*
+扩展正则：
++:匹配前面的子表达式一次或多次。要匹配 + 字符，请使用 \+
+?:匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。要匹配 ? 字符，请使用 \?
+():标记一个子表达式的开始和结束位置。子表达式可以获取供以后使用。要匹配这些字符，请使用 \( 和 \)
+{n}:重复n次   {n,}:重复n次以上  {n,m}:重复n到m次
+\w：匹配字母或数字或下划线或汉字
+|：表示或
 
 grep:根据用户指定的模式对目标文本进行过滤，显示被模式匹配到的行
-
 -v：显示不被匹配到的行
 -i：忽略字符大小写
 -n：显示匹配的行号
 -c：统计匹配的行数
 -o：仅显示匹配到的字符串
--E：使用ERE，等同于egrep
+-E：使用扩展正则
 
 sed：是流处理器，一次处理一行内容，原文件不会被改变，可加-i命令 修改原文件
 语法：sed [-hnV][-e<script>][-f<script文件>][文本文件] 
@@ -59,12 +68,12 @@ c ：取代 sed -e '2,5c No2-5number'
 d ：删除 sed -e '2,5d'
 i ：插入 sed -e '2i newline'
 p ：打印 sed -n '/root/p'
-s ：全局替换 sed -e 's/old/new/g'
+s ：全局替换 sed -e 's/old/new/g'  g:全局替换 等价于sed -e 's#old#new#g'
 sed -i 's/root/hello/g' test.txt 直接修改原文件内容
 
 awk：把文件逐行读入，以空格为默认空格符将每行切片，切开的部分再进行后续的处理
 常用参数： 
--F(FS):字段分隔符(默认是任何空格)
+-F(FS):域分隔符(默认是空格)
 RS:记录分隔符(默认是一个换行符)
 $0: 完整的输入记录 $1 代表第1条记录
 NR:已读的记录数（行数）,从1开始
@@ -72,13 +81,33 @@ BEGIN:处理文本之前要执行的操作
 END:处理文本之后要执行的操作
 
 搜索/etc/passwd有root关键字的所有行，并显示对应的shell:
-awk -F: '/root/{print $7}' /etc/passw
+awk -F':' '/root/{print $7}' /etc/passwdcat 
+
 打印/etc/passwd的第二行信息：
 awk 'NR==2{print $0}' /etc/passwd
+
 使用bigin加入标题：
 awk 'BEGIN{print "START"} NR==2 {print $0} END{print "ENDOVER"}' /etc/passwd
+
 自定义分隔符：
 echo "111 222|3333 4444|5555 55555"|awk 'BEGIN{RS="|"}{print $0}'
+
+grep -E 'HTTP/1.1\"\s404' access.log.1
+
+awk '$9~/404/' access.log.1   ~作用：$9与/404/进行匹配
+
+#获取进程ID并kill掉
+ps -aux|awk '$13~/\/gotwo_data\/Application\/task\/lib/ {cmd="kill -9 "$2;system(cmd)}'
+
+#获取日志表中访问量最多的3个IP地址
+awk '$9~/404/ {print$1}' access.log.1|sort|uniq -c|sort -nr|head -3
+grep -Eo '^([0-9]+\.){3}[0-9]+' access.log.1|sort|uniq -c|sort -nr|head -3
+
+#N:把下一行追加到此行(包含换行符)
+#:1,t1代表打标记，t1跳转到标记处
+awk '{print $1}' bbb.txt |sed ':1;N;s/\n/|/g;t1' 
+
+
 
 BASH编程:
 变量命名规则：
@@ -119,7 +148,7 @@ else 执行
 fi
 
 for循环：
-for var in 1 2 3 4 5 
+for var in {1..5};
 do
   echo 	${var}
 done
@@ -148,6 +177,89 @@ read -p "Enter :" one two three four
 echo "$three,$four,$one,$two"
 变量数量不够，剩下的参数就全部分配给最后一个变量
 read 命令行中不指定变量，收到的任何数据都放进特殊环境变量REPLY
+
+输出重定向：
+标准输出重定向：
+command >file   以覆盖的方式，把 command 的正确输出结果输出到 file 文件中
+command >>file  以追加的方式，把 command 的正确输出结果输出到 file 文件中
+标准错误输出重定向：
+command 2>file  以覆盖的方式，把 command 的错误信息输出到 file 文件中
+command 2>>file 以追加的方式，把 command 的错误信息输出到 file 文件中
+正确输出和错误信息同时保存
+command >file   2>&1   以覆盖的方式，把正确输出和错误信息同时保存到同一个文件（file）中
+command >>file  2>&1   以追加的方式，把正确输出和错误信息同时保存到同一个文件（file）中 
+command >file1  2>file2  以覆盖的方式，把正确的输出结果输出到 file1 文件中，把错误信息输出到 file2 文件中。
+command >>file1 2>>file2 以追加的方式，把正确的输出结果输出到 file1 文件中，把错误信息输出到 file2 文件中
+输入重定向：
+command <file  将 file 文件中的内容作为 command 的输入
+command <<END  从标准输入（键盘）中读取数据，直到遇见分界符 END 才停止（分界符可以是任意的字符串，用户自己定义）
+command <file1 >file2  将 file1 作为 command 的输入,并将 command 的处理结果输出到 file2
+
+linux性能统计分析：安装sysstat
+uptime：12:26:24 up 27 days, 18:57,  1 user,  load average: 0.25, 0.19, 0.12
+平均负载：runnable，uninterruptable的均值。1,5,15分钟的均值
+runnable: 可运行状态的进程（正在运行，等待运行）
+uninterruptable: 不可中断的进程(等待io设备)
+统计有多少用户:cat /etc/group|wc -l
+深入理解负载：
+cpu==1   load average==1，cpu时刻在用 
+cpu==4   load average==1，cpu只使用25%
+平均负载不大于3，则系统表现良好
+如果多核，需要累加 example：4核<12 
+
+dmesg：系统日志信息的解读
+
+vmstat x：每隔多少s执行一次
+内存管理：覆盖、交换，可用内存不足的时候使用虚拟内存
+字段含义说明：
+Procs（进程） 
+ -r 等待执行的任务数  -
+ b待IO的进程数量
+Memory(内存)：
+ -swpd 正在使用虚拟的内存大小，单位k 
+ -free 空闲内存大小
+ -buff 已用的buff大小，对块设备的读写进行缓冲
+ -cache 已用的cache大小，文件系统的cache
+ -inact 非活跃内存大小，即被标明可回收的内存，区别于free和active
+ -active 活跃的内存大小
+Swap 
+ -si 每秒从交换区写入内存的大小（单位：kb/s）
+ -so 每秒从内存写到交换区的大小
+IO
+ -bi 每秒读取的块数（读磁盘）
+ -bo 每秒写入的块数（写磁盘）
+system
+ -in 每秒中断数，包括时钟中断
+ -cs 每秒上下文切换数
+CPU（以百分比表示）
+ -us 用户进程执行消耗cpu时间(user time)
+ -sy 系统进程消耗cpu时间(system time)
+ -Id 空闲时间(包括IO等待时间)
+ -wa 等待IO时间
+缓存技术：
+buffer：缓冲垫，数据传输
+cache：保险柜，临时存储
+
+中断
+软中断：软件引起的中断（异常）
+硬中断：硬件引起的中断（I/O）
+
+CPU: 
+-us：非内核进程
+-sy：内核进程
+-id：空闲 
+-wa：等待IO st
+
+iostat
+iowait：CPU闲着的时候才会等I/O
+
+top:
+-n 获取多次cpu的执行情况， top -n 4 只更新4次
+-d 间隔时间 top -d 4 每隔4秒更新一次
+-p 获取指定端口的进程数据 top -p 4444
+linux:一切皆是文件，设备由udev进行管理，udev配置文件
+
+curl命令及jq命令了解
 ---------------------------
 
 https://www.jb51.net/article/173665.htm
@@ -630,7 +742,7 @@ devices=`adb devices|grep 'device\>'|awk '{print $1}'`
 for device in $devices
         do
         echo $device
-        #nohup 后台运行
+        #nohup  command  * 后台运行
         { nohup adb -s $device shell monkey -p com.xueqiu.android --pct-touch 30 --pct-motion 20 --pct-trackball 30 --pct-majornav 20 -v --throttle 50 100 &}
         done
 
@@ -796,3 +908,37 @@ emulator: ERROR: x86 emulation currently requires hardware acceleration!
 Please ensure Intel HAXM is properly installed and usable.
 CPU acceleration status: HAX kernel module is not installed!
 安装D:\android-sdk-windows\extras\intel\Hardware_Accelerated_Execution_Manager下的intelhaxm-android.exe文件
+
+MYSQL：
+1.下载安装：https://dev.mysql.com/downloads/file/?id=507824
+2.下载的文件解压并新建data目录夹及my.ini文件
+3.环境变量配置
+  新建系统变量：MYSQL_HOME=D:\mysql-8.0.27-winx64
+  新建环境变量：%MYSQL_HOME%\bin
+4.CMD窗口跳转到安装路径D:\mysql-8.0.27-winx64\bin目录,执行初始化命令
+  mysqld --initialize --user=mysql --console
+5.将MYSQL添加到服务：mysqld -install
+6.启动服务：net start  MySQL(可在服务和应用程序查看启动的mysql名)
+7.登录mysql：mysql -u root -p  tKix?Zhu4Y;R
+8.修改初始密码：ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456';
+创建表：
+CREATE TABLE `user` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  #unsigned 禁用负值
+  `NAME` varchar(100) DEFAULT NULL COMMENT '名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
+约束：
+（1）NOT NULL：字段中不允许出现NULL
+（2）UNIQUE：唯一标识数据库表中的每条记录，也就是约束该字段中没有重复的项，一个表中可以有多个UNIQUE约束
+（3）PRIMARY KEY：设置该字段为主键，一个表中只能有一个主键
+（4）FOREIGN KEY：一个表中的 FOREIGN KEY 是指向另一个表中的 PRIMARY KEY的
+（5）CHECK：限制该字段中的值的范围，如CHECK (id>0)
+（6）DEFAULT ：向字段中添加默认值
+（7）ENGINE： 设置存储引擎，不写则默认为InnoDB
+（8）CHARSET ：设置编码格式，默认为utf8
+（9）COMMENT 注释说明
+注意事项：
+（1）字段名和表名不要用加引号
+（2）varchar要在括号内写明其字符最大长度
+（3）约束可以写在数据类型后面以空格隔开，也可以定义完字段后写在后面以逗号隔开
