@@ -1,33 +1,33 @@
-linux常见命令：
-wc -l 统计多少行
-diff 文件进行比较
+第一章：linux常见命令
+wc -l:统计多少行
+diff:文件进行比较
 "uname -a "：可显示电脑以及操作系统的相关信息
 "cat /proc/version"：说明正在运行的内核版本
 "cat /etc/issue"： 显示的是发行版本信息
 nohup  命令  &:后台运行命令
 
-ps --help 查看所有命令选项及说明
-a、显示所有的进程  ps -A
-b、显示指定用户的进程（这里选定root用户） ps -u root
-c、显示所有的进程，包括命令行提示符信息   ps -ef
-d、显示所有正在内存中的进程，展示进程占用系统资源信息  ps -aux  
-e、ps与grep组合使用，查找匹配指定内容的进程  ps -aux|grep php
-f、列出命令行相关的进程  ps -l
-g、树状结构展示所有的进程  ps -axjf 
-h、显示进程信息，并记录到指定文件中（指定文件名不存在则默认创建该文件） ps -aux > log.txt
+ps --help 查看所有命令选项及说明
+显示所有的进程  ps  -A
+显示指定用户的进程（这里选定root用户） ps  -u  root
+显示所有的进程，包括命令行提示符信息   ps  -ef
+显示所有正在内存中的进程，展示进程占用系统资源信息  ps  -aux    
+ps与grep组合使用，查找匹配指定内容的进程  ps  -aux|grep  php
+列出命令行相关的进程  ps  -l
+树状结构展示所有的进程  ps  -axjf  
+显示进程信息，并记录到指定文件中（指定文件名不存在则默认创建该文件） ps  -aux  >  log.txt
 
 netstat：打印Linux网络系统的状态信息
 注：netstat命令默认是不显示LISTEN状态的网络连接和LISTEING状态的UNIX域连接，
-只有使用带-a或者-l参数的命令才能显示出来。  
--a (all)显示所有状态的连接
--t (tcp)仅显示tcp相关连接   
--u (udp)仅显示udp相关连接  
--n 拒绝显示别名，能显示数字的全部转化成数字。
--l 仅列出有在监听状态的连接
--p 显示进程的pid和名字
+只有使用带-a或者-l参数的命令才能显示出来。  
+-a  (all)显示所有状态的连接
+-t  (tcp)仅显示tcp相关连接   
+-u  (udp)仅显示udp相关连接  
+-n  拒绝显示别名，能显示数字的全部转化成数字。
+-l  仅列出有在监听状态的连接
+-p  显示进程的pid和名字
 
 
-linux三剑客：awk grep sed 
+linux三剑客：awk grep sed
 管道：linux提供管道符"|"将两个命令分开，管道符左边的命令的输出作为管道符右边命令的输入
 
 正则表达式：
@@ -56,7 +56,7 @@ grep:根据用户指定的模式对目标文本进行过滤，显示被模式匹
 -E：使用扩展正则
 
 sed：是流处理器，一次处理一行内容，原文件不会被改变，可加-i命令 修改原文件
-语法：sed [-hnV][-e<script>][-f<script文件>][文本文件] 
+语法：sed [-hnV][-e<script>][-f<script文件>][文本文件]
 参数说明：
 -h或--help 显示帮助。
 -n或--quiet或--silent 仅显示script处理后的结果。
@@ -72,7 +72,7 @@ s ：全局替换 sed -e 's/old/new/g'  g:全局替换 等价于sed -e 's#old#ne
 sed -i 's/root/hello/g' test.txt 直接修改原文件内容
 
 awk：把文件逐行读入，以空格为默认空格符将每行切片，切开的部分再进行后续的处理
-常用参数： 
+常用参数：
 -F(FS):域分隔符(默认是空格)
 RS:记录分隔符(默认是一个换行符)
 $0: 完整的输入记录 $1 代表第1条记录
@@ -81,7 +81,7 @@ BEGIN:处理文本之前要执行的操作
 END:处理文本之后要执行的操作
 
 搜索/etc/passwd有root关键字的所有行，并显示对应的shell:
-awk -F':' '/root/{print $7}' /etc/passwdcat 
+awk -F':' '/root/{print $7}' /etc/passwdcat
 
 打印/etc/passwd的第二行信息：
 awk 'NR==2{print $0}' /etc/passwd
@@ -105,7 +105,7 @@ grep -Eo '^([0-9]+\.){3}[0-9]+' access.log.1|sort|uniq -c|sort -nr|head -3
 
 #N:把下一行追加到此行(包含换行符)
 #:1,t1代表打标记，t1跳转到标记处
-awk '{print $1}' bbb.txt |sed ':1;N;s/\n/|/g;t1' 
+awk '{print $1}' bbb.txt |sed ':1;N;s/\n/|/g;t1'
 
 
 
@@ -132,19 +132,19 @@ BASH编程:
 `expr $a % $b`
 
 关系运算符：
--eq 相等 
--ne 不相等 
--gt  大于  
--lt 小于 
+-eq 相等
+-ne 不相等
+-gt  大于
+-lt 小于
 -ge 大于等于
 -le 小于等于
 
 if语句：
-if 条件 
-   then 执行 
-elif 条件 
-   then 执行 
-else 执行 
+if 条件
+   then 执行
+elif 条件
+   then 执行
+else 执行
 fi
 
 for循环：
@@ -161,7 +161,7 @@ test.txt 指向数据文件，并且该变量被作为 while 命令的重定向�
 
 文件参数传递:
 $0是文件名
-$1 是第一个参数,$2 是第二个参数,第9个变量之后,你必须在变量数字周围加上花括号，比如 ${10} 
+$1 是第一个参数,$2 是第二个参数,第9个变量之后,你必须在变量数字周围加上花括号，比如 ${10}
 ${#string} 统计string字符串个数
 $# 传递到脚本的参数个数
 $* 所有参数
@@ -187,7 +187,7 @@ command 2>file  以覆盖的方式，把 command 的错误信息输出到 file �
 command 2>>file 以追加的方式，把 command 的错误信息输出到 file 文件中
 正确输出和错误信息同时保存
 command >file   2>&1   以覆盖的方式，把正确输出和错误信息同时保存到同一个文件（file）中
-command >>file  2>&1   以追加的方式，把正确输出和错误信息同时保存到同一个文件（file）中 
+command >>file  2>&1   以追加的方式，把正确输出和错误信息同时保存到同一个文件（file）中
 command >file1  2>file2  以覆盖的方式，把正确的输出结果输出到 file1 文件中，把错误信息输出到 file2 文件中。
 command >>file1 2>>file2 以追加的方式，把正确的输出结果输出到 file1 文件中，把错误信息输出到 file2 文件中
 输入重定向：
@@ -202,27 +202,27 @@ runnable: 可运行状态的进程（正在运行，等待运行）
 uninterruptable: 不可中断的进程(等待io设备)
 统计有多少用户:cat /etc/group|wc -l
 深入理解负载：
-cpu==1   load average==1，cpu时刻在用 
+cpu==1   load average==1，cpu时刻在用
 cpu==4   load average==1，cpu只使用25%
 平均负载不大于3，则系统表现良好
-如果多核，需要累加 example：4核<12 
+如果多核，需要累加 example：4核<12
 
 dmesg：系统日志信息的解读
 
 vmstat x：每隔多少s执行一次
 内存管理：覆盖、交换，可用内存不足的时候使用虚拟内存
 字段含义说明：
-Procs（进程） 
+Procs（进程）
  -r 等待执行的任务数  -
  b待IO的进程数量
 Memory(内存)：
- -swpd 正在使用虚拟的内存大小，单位k 
+ -swpd 正在使用虚拟的内存大小，单位k
  -free 空闲内存大小
  -buff 已用的buff大小，对块设备的读写进行缓冲
  -cache 已用的cache大小，文件系统的cache
  -inact 非活跃内存大小，即被标明可回收的内存，区别于free和active
  -active 活跃的内存大小
-Swap 
+Swap
  -si 每秒从交换区写入内存的大小（单位：kb/s）
  -so 每秒从内存写到交换区的大小
 IO
@@ -244,10 +244,10 @@ cache：保险柜，临时存储
 软中断：软件引起的中断（异常）
 硬中断：硬件引起的中断（I/O）
 
-CPU: 
+CPU:
 -us：非内核进程
 -sy：内核进程
--id：空闲 
+-id：空闲
 -wa：等待IO st
 
 iostat
@@ -860,7 +860,7 @@ jmeter.properties:关闭ssl  server.rmi.ssl.disalbe=true
 system.properties java.rmi.server.hostname=负载机IP地址
 运行jmeter-server
 控制节点服务器部署：
-jmeter.properties  
+jmeter.properties
 添加负载机IP:remote_hosts=节点服务器IP1, 节点服务器IP2
 关闭ssl：server.rmi.ssl.disalbe=true
 
@@ -938,7 +938,95 @@ CREATE TABLE `user` (
 （7）ENGINE： 设置存储引擎，不写则默认为InnoDB
 （8）CHARSET ：设置编码格式，默认为utf8
 （9）COMMENT 注释说明
+关键名字解释：
+主键：唯一标识符,不重复,非空,隐示索引,用来保证数据完整性.只能有一个
+联合主键：两个字段组合确定数据的唯一性,
+外键：来自于其他表的主键,可以重复的, 可以为空值，用来和其他表建立联系用的，一个表可以有多个外键
+索引：没有重复值,但可以有一个空值,提高查询排序的速度，一个表可以有多个唯一索引
 注意事项：
 （1）字段名和表名不要用加引号
 （2）varchar要在括号内写明其字符最大长度
 （3）约束可以写在数据类型后面以空格隔开，也可以定义完字段后写在后面以逗号隔开
+explain：对sql进行分析，加载sql前面
+修改表结构：
+alter table 表名 修改选项
+修改选项语法：
+	add column 列名 类型  //添加字段
+	change column 旧列名 新列名 新列类型 //修改字段名
+	modify column 列名 类型 //修改字段类型
+	drop column 列名 //删除字段
+	rename to 新表名//修改表名
+<> !=  不等于
+like语法：
+	'%a'     //以a结尾的数据
+	'a%'     //以a开头的数据
+	'%a%'    //含有a的数据
+	'_a_'    //三位且中间字母是a的
+	'_a'     //两位且结尾字母是a的
+	'a_'     //两位且开头字母是a的
+删除数据:
+delete 单条删除 是 DML 语句，不想提交事务可以回滚
+truncate 清除表数据 drop 清除表数据和结构，truncate和drop是DDL语句，操作完立马生效不可回滚
+UNION语法：
+UNION 语句：用于将不同表中相同列中查询的数据展示出来；（不包括重复数据）
+SELECT 列名称 FROM 表名称 UNION SELECT 列名称 FROM 表名称 ORDER BY 列名称；
+UNION ALL 语句：用于将不同表中相同列中查询的数据展示出来；（包括重复数据）
+SELECT 列名称 FROM 表名称 UNION ALL SELECT 列名称 FROM 表名称 ORDER BY 列名称；
+join语法：
+INNER JOIN（内连接,或等值连接）：获取两个表中字段匹配关系的记录
+LEFT JOIN(左连接):获取左表所有记录，即使右表没有对应匹配的记录
+RIGHT JOIN(右连接):用于获取右表所有记录，即使左表没有对应匹配的记录
+NULL:列表的值为NULL时 用is NULL进行判断，值为空时不应用NULL进行判断
+正则表达式：MYSQL也可以匹配正则表达式，where+字段名 +REGEXP+正则表达式
+内置函数：
+删除空格：TRIM  LTRIM RTRIM
+返回字符串左边或右边的字符：LEFT/RIGHT(STR,LEN)
+反序：REVERSES
+从某个位置截取长度为冷的字符串：SUBATR(STR,START,LEN)
+常用函数：
+ADDDATE(d,n)：d在n天后的日期
+CURRENT_DATE()/CURRENT_TIME():返回当前日期/时间
+CURRENT_TIMESTAMP()/NOW():返回当前日期和时间
+DATEDIFF(d1,d2):计算日期d1,d2相隔天数
+
+DDL（Data Definition Languages）语句：即数据库定义语句，用来创建数据库中的表、索引、视图、存储过程、触发器等，常用的语句关键字有：CREATE,ALTER,DROP,TRUNCATE,COMMENT,RENAME。
+DML（Data Manipulation Language）语句：即数据操纵语句，用来查询、添加、更新、删除等，常用的语句关键字有：SELECT,INSERT,UPDATE,DELETE,MERGE,CALL,EXPLAIN PLAN,LOCK TABLE,包括通用性的增删改查。
+DCL（Data Control Language）语句：即数据控制语句，用于授权/撤销数据库及其字段的权限。常用的语句关键字有：GRANT,REVOKE。
+TCL（Transaction Control Language）语句：事务控制语句，用于控制事务，常用的语句关键字有：COMMIT,ROLLBACK,SAVEPOINT,SET TRANSACTIO
+
+事务特性：
+原子性：事务开始后所有操作，要么全部做完，要么全部不做，不可能停滞在中间环节
+一致性：事务开始前和结束后，数据库的完整性约束没有被破坏 。比如A向B转账，不可能A扣了钱，B却没收到
+隔离性：同一时间，只允许一个事务请求同一数据，不同的事务之间彼此没有任何干扰。比如A正在从一张银行卡中取钱，在A取钱的过程结束前，B不能向这张卡转账。
+持久性：事务完成后，事务对数据库的所有更新将被保存到数据库，不能回滚
+MYSQL 事务处理主要有两种方法（DML语句）：
+1、用 BEGIN, ROLLBACK, COMMIT来实现
+	BEGIN 开始一个事务
+	ROLLBACK 事务回滚
+	COMMIT 事务确认
+2、直接用 SET 来改变 MySQL 的自动提交模式:
+	SET AUTOCOMMIT=0 禁止自动提交
+	SET AUTOCOMMIT=1 开启自动提交
+
+数据结构比对、数据比对：可使用navicat-工具：结构同步、数据同步，只是对库级别进行操作
+结构同步：只是对表结构进行同步（新增表、删除表、修改表），不同步数据
+
+导入示范数据库：
+1.将解压文件移至到bin目录
+2.cmd命令切换到bin目录 source employees.sql即可
+
+存储过程：制造数据
+	drop PROCEDURE if EXISTS testPROCEDURE;
+	delimiter $$
+	CREATE PROCEDURE testPROCEDURE()
+	BEGIN
+		DECLARE i int;
+		set i=101;
+		while(i<=300) DO
+		INSERT into user VALUES(i,concat("张三",i),concat('测试部门',i));
+		SET i=i+1;
+		end WHILE;
+	end $$
+	delimiter ;
+	call testPROCEDURE() 调用存储过程
+mysql log查看日志
