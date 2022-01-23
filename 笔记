@@ -1,9 +1,11 @@
-第一章：linux常见命令
+﻿第一章：linux常见命令
 wc -l:统计多少行
 diff:文件进行比较
 "uname -a "：可显示电脑以及操作系统的相关信息
 "cat /proc/version"：说明正在运行的内核版本
-"cat /etc/issue"： 显示的是发行版本信息
+"cat /etc/redhat-release"： 显示的是发行版本信息
+
+centos：下载文件 wget "https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz"
 nohup  命令  &:后台运行命令
 
 ps --help 查看所有命令选项及说明
@@ -106,7 +108,6 @@ grep -Eo '^([0-9]+\.){3}[0-9]+' access.log.1|sort|uniq -c|sort -nr|head -3
 #N:把下一行追加到此行(包含换行符)
 #:1,t1代表打标记，t1跳转到标记处
 awk '{print $1}' bbb.txt |sed ':1;N;s/\n/|/g;t1'
-
 
 
 BASH编程:
@@ -1030,3 +1031,349 @@ MYSQL 事务处理主要有两种方法（DML语句）：
 	delimiter ;
 	call testPROCEDURE() 调用存储过程
 mysql log查看日志
+
+
+----------------------HttpRunner------------------
+生成目录：httprunner startproject 20121227
+运行测试用例:httprunner run testcases
+
+---------------------docker————————————————————————
+docker Image：docker镜像,AUFS文件系统
+docker Registry：存放镜像的地方
+docker Contrainers:docker容器，镜像运行后的进程
+
+docker安装步骤
+-安装依赖工具：yum install -y yum-utils device-mapper-persistent-data lvm2
+-yum的配置管理(aliyun)：yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+-更新yum缓存：yum makecache fast
+-docker安装：sudo yum install docker-ce
+-配置镜像加速包：
+在/etc/docker/路径下vim daemon.json新增{"registry-mirrors": ["https://4z4z2eu2.mirror.aliyuncs.com"]}，然后重启docker
+
+docker基本命令
+docker开机自启设置：systemctl enable docker.service
+docker启动服务： systemctl start docker
+docker重启服务： systemctl restart docker
+docker版本信息:docker version
+docker系统信息:docker info
+
+docker镜像管理
+查看所有镜像：docker images
+搜索镜像：docker search xxx
+拉取镜像：docker pull xxx:版本号
+导出镜像：docker save xxx:版本号 > xxx.tar
+导入镜像：docker load < xxx.tar
+删除镜像：docker rmi xxx:版本号
+更改镜像名：docker tag xxx:版本号 yyy
+查看镜像创建历史：docker history xxx
+
+docker容器管理：
+
+运行容器：docker run -it  --name tomcat11 -d -p 8888:8080 tomcat:8.0 
+  -i：交互式操作
+  -t：终端
+  --name：容器名称
+  -p ：端口映射
+  -d ：容器在后台运行，否则容器关闭后容器将退出
+  --rm：容器退出后随之将其删除，可以避免浪费空间 
+  --net 为空，默认bridge模式
+
+开启、关闭、kill容器：docker start/stop/kill 容器ID
+暂停、重启容器：docker pause/uppause 容器ID
+强制删除容器：docker -rm -f 容器ID，运行中的容器只能强制删除，未运行的容器直接rm可删除	
+查看容器进行：docker top 容器ID
+查看资源占用：docker stats 容器ID
+进入容器：docker exec -it 容器ID bash
+执行命令：docker exec -it 容器ID 命令
+复制文件到宿主机:docker cp 容器名:文件在容器里面的路径  宿主机的相应路径 
+复制文件到容器：docker cp 拷贝的文件路径 容器名:容器里面对应的路径
+
+docker删除容器卷：docker volume rm $(docker volume ls | awk 'NR>1 {print$2}')
+docker删除镜像：docker rmi $(docker images|awk 'NR>1 {print$3}')
+查看日志：docker logs -f -t --since="2017-05-31"  --tail=1 容器id
+--since : 此参数指定了输出日志开始日期，即只输出指定日期之后的日志。
+-f : 查看实时日志
+-t : 查看日志产生的日期
+-tail=10 : 查看最后的10条日志。
+
+查看容器内文件结构：docker diff 容器ID
+查看容器元信息：docker inspect 容器ID
+格式化输出：docker inspect -f '{{.State.Status}}' a4c6731fc883
+
+docker实战-：搭建nginx服务器
+docker run -d --name nginx -p 80:80 -v ${PWD}/nginx/html:/usr/share/nginx/html nginx:1.17.9
+ -v:目录挂载   ${PWD}：宿主机当前目录
+
+docker实战二：搭建testlink
+1.部署数据库：docker network create testlink
+2.运行数据库：docker run -d --name mariadb -e MARIADB_ROOT_PASSWORD=mariadb -e MARIADB_USER=bn_testlink -e MARIADB_PASSWORD=bn_testlink -e MARIADB_DATABASE=bitnami_testlink --net testlink -v ${PWD}:/bitnami bitnami/mariadb:10.3.22
+-d:后台运行
+
+--name：设置别名
+
+-e：设置参数
+
+-e MARIADB_ROOT_PASSWORD=mariadb：设置管理员密码
+
+-e MARIADB_USER=bn_testlink：创建一个用户
+
+-e MARIADB_PASSWORD=bn_testlink：用户密码
+
+-e MARIADB_DATABASE=bitnami_testlink：新建数据库
+
+--net testlink：指定网络
+
+-v ${PWD}/mariadb:/bitnami bitnami/mariadb:10.3.22：挂载目录
+3.运行testlink:
+docker run -d -p 8080:8080 -p 8443:8443 --name testlink -e TESTLINK_DATABASE_USER=bn_testlink -e TESTLINK_DATABASE_PASSWORD=bn_testlink -e TESTLINK_DATABASE_NAME=bitnami_testlink --net testlink -v ${PWD}:/bitnami bitnami/testlink:1.9.20
+
+
+
+-p 8080:8080:http协议端口
+
+-p 8443:8443:https协议端口
+
+--name testlink :设置别名
+
+-e：设置参数
+
+-e TESTLINK_DATABASE_USER=bn_testlink:传入数据库用户
+
+-e TESTLINK_DATABASE_PASSWORD=bn_testlink:传入数据库密码
+
+-e TESTLINK_DATABASE_NAME=bitnami_testlink:传入数据库名
+
+--net testlink:指定网络和数据库一个网络下
+
+-v ${PWD}:/bitnami :挂载一个目录
+bitnami/testlink:1.9.20
+默认用户名：user 密码：bitnami
+
+docker实战三：搭建jenkins
+docker run -d --name jenkins -p 8081:8080 -p 50000:50000 -v ${PWD}/jenkins:/var/jenkins_home jenkins/jenkins
+需要将jenkins chmod -R 777 jenkins 
+
+
+docker实战四：私有仓库部署
+1.docker run -d -v ${PWD}/registry:/var/lib/registry -p 5000:5000 --restart always --name registry registry:2.7.1
+可能出现的问题：WARNING: IPv4 forwarding is disabled. Networking will not work.
+#需要做如下配置
+vi /etc/sysctl.conf
+net.ipv4.ip_forward=1  #添加这段代码
+#重启network服务   systemctl restart network && systemctl restart docker
+2.docker ta实现命名：docker tag nginx:1.17.9 192.168.1.108:5000/nginx:1.17.9
+3.修改客户端docker的配置文件/etc/docker/daemon.json，添加registry服务地址："insecure-registries": ["192.168.1.108:5000"]并重启
+4.上传镜像到仓库：docker push 192.168.1.108:5000/nginx:1.17.9
+5.浏览器中输入http://192.168.1.108:5000/v2/_catalog即可查看上传的镜像
+6.其他服务器即可下载：docker pull 192.168.1.108:5000/nginx:1.17.9
+	
+docker-compose:用来定义和运行复杂应用的Docker工具.通过compose，可以使用yaml文件来配置应用程序的服务
+compose使用分为三步：
+dockerfile:定义应用程序的环境
+docker-compose.yaml 定义组成应用程序的服务
+docker-compose up 启动整个应用程序
+
+docker-compose下载安装：
+curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+
+docke-compose常用命令：
+查看配置：docker-compose config
+后台启动：docker-compose up -d
+构建镜像：docker-compose build
+下载镜像：docker-compose pull
+查看运行的：docker-compose ps
+查看进程：docker-compose top
+启动：docker-compose start
+停止：docker-compose stop
+
+dockerfile常用指令：
+FROM：基础镜像，必须是dockerfile的首命令
+LABER:为容器镜像生成元数据标签信息
+USER
+
+#基于nginx:1.17.9镜像构建
+FROM nginx:1.17.9
+#指定信息
+LABEL maintainer=“68100629@163.com”
+
+
+docker commit CONTAINER [REPOSITORY[:TAG]]，用户提交对容器的修改，并生成新的镜像，不推荐
+
+如何规划docker容器的镜像结构？
+讲述docker常用的几种网络模式以及背后的原理？什么是linux的名称空间？
+
+
+网络名称空间、进程名称空间、mount名称空间隔离docker容器
+
+名称空间相关操作：cd /proc/$(docker inspect -f "{{.State.Pid}}" registry)/n
+1.查看PID：docker inspect -f "{{.State.Pid}}" registry
+2.cd /proc/PID/ns
+3.切换网络名称空间：nsenter -t PID -n
+
+帮助文档：testerhome.com/articles/18471
+
+jekins配置管理：
+1.修改时间--删除已有实例，重新创建实例并设置时区 
+docker run -d --name jenkins -p 8081:8080 -p 50000:50000 -v ${PWD}/jenkins:/var/jenkins_home  -e JAVA_OPTS=-Duser.timezone=Asia/shanghai  jenkins/jenkins
+2.节点连接方式：
+8080端口：jenkins服务器的对外UI地址
+50000端口：slave节点与jenkins的通讯端口
+3.报警机制
+>配置email：安装插件：Email Extension,Email Extension Template
+>系统配置：增加管理员邮箱，邮件通知增加SMTP服务器及用户默认邮件后缀
+>邮件发送内容模板配置
+>配置完成后需要在job：增加构建操作步骤选择E-mail Notification
+4.jenkins父子多任务运行：
+任务启动的触发条件：其他任务的运行结果
+前驱任务成功条件下触发
+前驱任务失败条件下触发
+前驱任务不稳定条件下触发
+适用场景：有先后次序关系的任务，比如部署环境任务->验收测试任务
+
+
+centos python虚拟环境：
+[root@localhost home]# cd ~/py3/           #进入到需要创建虚拟环境的目录
+[root@localhost home]# python3 -m venv .   #在当前目录下创建虚拟环境
+[root@localhost home]# source bin/activate #激活该虚拟环境
+[root@localhost home]# deactivate          #关闭虚拟环境
+
+
+
+jenkins容器安装python3
+1.配置国内阿里云镜像源
+cat /etc/issue  查看Ubuntu 版本
+https://developer.aliyun.com/mirror/  镜像源地址
+cat /etc/apt/sources.list 修改镜像地址
+deb http://mirrors.aliyun.com/debian/ bullseye main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ bullseye main non-free contrib
+deb http://mirrors.aliyun.com/debian-security/ bullseye-security main
+deb-src http://mirrors.aliyun.com/debian-security/ bullseye-security main
+deb http://mirrors.aliyun.com/debian/ bullseye-updates main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ bullseye-updates main non-free contrib
+deb http://mirrors.aliyun.com/debian/ bullseye-backports main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ bullseye-backports main non-free contrib
+
+2.安装依赖包
+apt=apt-get、apt-cache 和 apt-config 中最常用命令选项的集合
+apt install wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
+3.编译安装
+./configure --prefix=/var/jenkins_home/python3 --with-ssl 配置python安装目录
+make
+make insatll
+4.添加软连接
+ln -s /var/jenkins_home/python3/bin/python3.7 /usr/bin/python3
+ln -s /var/jenkins_home/python3/bin/pip3.7 /usr/bin/pip3
+5.生成ssh密钥
+ssh-keygen -t rsa -C "68100629@163.com"
+cd ~/.ssh
+id_rsa 为密钥
+id_rsa.pub
+
+pipeline:
+pipeline：代表整条流水线，包含整条流水线的逻辑
+stage部分：阶段，代表流水线的阶段。每个阶段都必须有名称
+stages部分：流水线中多个stage的容器。stages部分至少包含一个stage
+steps部分：代表阶段中的一个或多个具体步骤（step）的容器。steps部分至少包含一个步骤
+agent部分：指定流水线的执行位置（Jenkins agent）。流水线中的每个阶段都必须在某个地方（物理机、虚拟机或Docker容器）执行，agent部分即指定具体在哪里执行
+参数：
+• 必须出现的指令
+• any:可以在任意agent上执行pipeline
+• none:pipeline将不分配全局agent，每个stage分配自己的agent
+• label：指定运行节点的Label
+• node:自定义运行节点配置，指定label，指定customWordspace
+• docker：控制目标接点上的docker运行相关内容
+environment：用于设置环境变量，可定义在stage或pipeline部分
+tools：可定义在pipeline或stage部分。它会自动下载并安装我们指定的工具，并将其加入PATH变量中input：定义在stage部分，会暂停pipeline，提示你输入内容
+options ： 用于配置Jenkins pipeline 本身的选项， 比如options{retry（3）}指当pipeline失败时再重试2次。options指令可定义在stage或pipeline部分。
+parallel：并行执行多个step。在pipeline插件1.2版本后，parallel开始支持对多个阶段进行并行执行
+parameters：与input不同，parameters是执行pipeline前传入的一些参数。
+triggers：用于定义执行pipeline的触发器
+when：当满足when定义的条件时，阶段才执行
+
+post部分包含的是在整个pipeline或阶段完成后一些附加的步骤根据pipeline或阶段的完成状态，post部分分成多种条件块，包括：
+• always：不论当前完成状态是什么，都执行。
+• changed：只要当前完成状态与上一次完成状态不同就执行。
+• fixed：上一次完成状态为失败或不稳定（unstable），当前完成状态为成功时执行。
+• regression：上一次完成状态为成功，当前完成状态为失败、不稳定或中止（aborted）时执行。
+• aborted：当前执行结果是中止状态时（一般为人为中止）执行。
+• failure：当前完成状态为失败时执行。
+• success：当前完成状态为成功时执行。
+• unstable：当前完成状态为不稳定时执行。
+• cleanup：清理条件块。不论当前完成状态是什么，在其他所有条件块执行完成后都执行。post部分可以同时包含多种条件块。
+
+
+
+构建触发：
+1.时间触发：pipeline中使用trigger指令来定义时间触发。tigger指令只能被定义在pipeline块下。
+1.1定时执行：triggers{cron('0 0 * * *')}
+格式为：MINUTE HOUR DOM MONTH DOW
+• MINUTE：一小时内的分钟，取值范围为0∼59。
+• HOUR：一天内的小时，取值范围为0∼23。
+• DOM：一个月的某一天，取值范围为1∼31。
+• MONTH：月份，取值范围为1∼12。
+• DOW：星期几，取值范围为0∼7。0和7代表星期天
+1.2轮询代码仓库：指定期到代码仓库询问代码是否有变化，如果有变化就执行,pollSCM
+triggers{pollSCM('H/1 * * * *')} 每分钟检查代码仓库代码是否有变化
+2.事件触发：
+2.1由上游任务触发：upstream
+当B任务的执行依赖A任务的执行结果时，A就被称为B的上游任务
+triggers{upstream(upstreamProjects:'job1,job2',threshoID:hudson.model.Result.SUCCESS)}
+threshold参数是指上游任务的执行结果是什么值时触发。
+hudson.model.Result是一个枚举,包括以下值：
+• ABORTED：任务被手动中止。
+• FAILURE：构建失败。
+• SUCCESS：构建成功。
+• UNSTABLE：存在一些错误，但不至于构建失败。
+• NOT_BUILT：在多阶段构建时，前面阶段的问题导致后面阶段无法执行
+注意：需要手动触发一次任务，让Jenkins加载pipeline后，trigger指令才会生效
+2.2GitLab通知触发
+
+
+
+
+
+
+
+
+
+
+
+
+
+安装的jenkins/tomcat无法访问的解决方式：
+方法一：
+1.查看防火墙是否开启systemctl status firewalld
+2.查看是否开放对应端口 firewall-cmd --list-ports
+3.窗口没有开放，则加入 firewall-cmd --permanent --zone=public --add-port=端口号/tcp
+4.重启防火墙 systemctl reload firewalld
+5.再次检查是否开放对应端口 firewall-cmd --list-ports
+方法二：直接关闭防火墙
+1.关闭防火墙：systemctl stop firewalld
+2.停止并禁用开机启动：sytemctl disable firewalld
+启动防火墙：systemctl start firewalld 
+设置开机启动：systemctl enable firewalld
+
+连接mysql报错：1251Client does not support authentication protocol requested by server
+原因是：mysql8 之前的版本中加密规则是mysql_native_password,而在mysql8之后,加密规则是caching_sha2_password
+解决方法：
+1.首先进入mysql容器，登陆到mysql
+   docker exec -it mysql bash;
+   mysql -uroot -p;
+2.以mysql_native_password设置新密码
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'newyourpassword';
+3.新权限让更改的数据文件立即生效
+flush privileges;
+4.如仍未解决：
+alter user 'root'@'%' identified with mysql_native_password by 'yourPassword';
+flush privileges;
+
+sql操作报错：[Err] 1055 - Expression #1 of ORDER BY clause is not in GROUP BY clause and contains nonaggregated column 
+‘information_schema.PROFILING.SEQ’ which is not functionally dependent on columns in GROUP BY clause; this is 
+incompatible with sql_mode=only_full_group_by
+解决方法：修改当前数据库的SQL_MODE
+-- 查看SQL_MODE
+SELECT @@sql_mode;
+-- 修改SQL_MODE
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
